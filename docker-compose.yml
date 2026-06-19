@@ -1,0 +1,188 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - microservicios-net
+
+  api-gateway:
+    build:
+      context: ../ms-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    networks:
+      - microservicios-net
+
+  ms-usuarios:
+    build:
+      context: ../ms-usuarios
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_usuarios?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-catalogo:
+    build:
+      context: ../ms-catalogo
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_catalogo?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-inventario:
+    build:
+      context: ../ms-inventario
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_inventario?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-carrito:
+    build:
+      context: ../ms-carrito
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_carrito?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-compatibilidad:
+    build:
+      context: ../ms-compatibilidad
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_compatibilidad?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-pedidos:
+    build:
+      context: ../ms-pedido
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_pedidos?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-ensamblajes:
+    build:
+      context: ../ms-ensamblajes
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_ensamblajes?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-pagos:
+    build:
+      context: ../ms-pagos
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_pagos?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-despachos:
+    build:
+      context: ../ms-despachos
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_despachos?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+  ms-notificaciones:
+    build:
+      context: ../ms-notificaciones
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/db_notificaciones?createDatabaseIfNotExist=true&serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASSWORD=
+    networks:
+      - microservicios-net
+
+networks:
+  microservicios-net:
+    driver: bridge
