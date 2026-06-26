@@ -229,6 +229,19 @@ services:
     networks:
       - microservicios-net
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "8000:80"
+    environment:
+      - PMA_HOST=mysql-db
+      - PMA_USER=root
+      - PMA_PASSWORD=
+    depends_on:
+      - mysql-db
+    networks:
+      - microservicios-net
+
 networks:
   microservicios-net:
     driver: bridge
